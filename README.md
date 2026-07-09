@@ -1,54 +1,102 @@
-# Welcome to your Expo app 👋
+# Stride Habit Tracker 🏃‍♂️📅
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Stride is a premium, feature-rich React Native and Expo habit tracking application designed to help users build consistency and achieve their personal goals. It integrates seamlessly with Firebase (Authentication and Firestore) for real-time synchronization and secure cloud backups.
 
-## Get started
+---
 
-1. Install dependencies
+## 🌟 Key Features
 
-   ```bash
-   npm install
-   ```
+- **Flexible Habit Types**:
+  - **Standard Habits**: Simple toggle checkoffs (e.g., "Read 20 pages").
+  - **Numeric/Target Habits**: Log progressive metrics with specific targets (e.g., "Drink 2500ml Water", "Do 50 Pushups").
+- **Smart Habit Scheduling**: Schedule habits to recur on specific days of the week.
+- **Streak Tracking**:
+  - **Individual Streaks**: Tracks consecutive completion days for each individual habit.
+  - **Master Streak**: Celebrates consecutive days where 100% of all scheduled habits are completed.
+- **Interactive Calendar Dashboard**: Scroll through a 1-year history to view past completions and plan ahead.
+- **Drag-and-Drop Reordering**: Organise your habits list effortlessly using intuitive press-and-drag interactions.
+- **Rich Data Analytics**: Deep dive into your productivity with weekly and monthly completion statistics.
+- **Firebase Sync**: Supports anonymous sign-in and email logins, keeping habit histories securely backed up and synced in real-time.
+- **Beautiful Dark Theme UI**: Sleek, modern dark mode with smooth animations and responsive feedback.
 
-2. Start the app
+---
 
-   ```bash
-   npx expo start
-   ```
+## 🛠️ Tech Stack
 
-In the output, you'll find options to open the app in a
+- **Framework**: [Expo](https://expo.dev) & [React Native](https://reactnative.dev)
+- **Routing**: [Expo Router](https://docs.expo.dev/router/introduction) (file-based navigation)
+- **Database & Auth**: [Firebase v12](https://firebase.google.com) (Firestore & Auth)
+- **Animations & Layout**: [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/) & [React Native Draggable FlatList](https://github.com/computerjazz/react-native-draggable-flatlist)
+- **Icons**: Expo Vector Icons (Ionicons)
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 📂 Project Structure
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```text
+├── app/                  # Expo Router file-based entry screens
+│   ├── (auth)/           # Authentication screens (Login, Sign-Up, Welcome)
+│   ├── (tabs)/           # Core application tabs
+│   │   ├── index.tsx     # Home Dashboard (Habit list, Calendar, Reordering)
+│   │   ├── explore.tsx   # Statistics & Analytics Screen
+│   │   └── settings.tsx  # User Settings & Sign Out
+│   ├── _layout.tsx       # Root layout navigator & Providers wrapper
+│   └── modal.tsx         # Add / Edit Habit detail form
+├── components/           # Custom UI elements (themed views, navigation, buttons)
+├── context/              # Global state management (HabitsContext)
+├── firebase/             # Firestore, Auth config, and initialization
+├── hooks/                # Custom React hooks (useHabits, theme styling)
+├── services/             # Firebase data access layer
+└── utils/                # Helper utilities and date formatters
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+## 🚀 Getting Started
 
-To learn more about developing your project with Expo, look at the following resources:
+### Prerequisites
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Make sure you have Node.js and npm installed on your system.
 
-## Join the community
+### 1. Clone the repository and install dependencies
 
-Join our community of developers creating universal apps.
+```bash
+git clone https://github.com/andreast0702-sudo/Stride-HabitTracker.git
+cd Stride-HabitTracker
+npm install
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
-# Stride-HabitTracker
-# Stride-HabitTracker
-# Stride-HabitTracker
-# Stride-HabitTracker
+### 2. Configure Firebase
+
+Create a Firebase project at [Firebase Console](https://console.firebase.google.com/) and create web config credentials. Add a config file or update configuration in `firebase/config.js` with your specific API keys:
+
+```javascript
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+```
+
+### 3. Run the development server
+
+Start the Expo bundler:
+
+```bash
+npx expo start
+```
+
+Use the printed options to open the application in:
+- **iOS Simulator**: Press `i`
+- **Android Emulator**: Press `a`
+- **Web Browser**: Press `w`
+- **Expo Go App**: Scan the QR code with your mobile device
+
+---
+
+## 🛡️ License
+
+This project is licensed under the MIT License.
