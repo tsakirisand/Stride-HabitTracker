@@ -109,6 +109,7 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
             : route.name;
 
         const onPress = () => {
+          triggerHaptic('shock');
           const event = navigation.emit({
             type: 'tabPress',
             target: route.key,
@@ -116,7 +117,6 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
           });
 
           if (!isFocused && !event.defaultPrevented) {
-            triggerHaptic('light');
             navigation.navigate(route.name, route.params);
           }
         };
@@ -131,7 +131,7 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
           <TouchableOpacity
             key={route.key}
             onPress={onPress}
-            activeOpacity={0.7}
+            activeOpacity={0.5}
             onLayout={(event) => handleLayout(index, event)}
             style={styles.tabItem}
           >

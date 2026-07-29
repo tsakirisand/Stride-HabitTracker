@@ -446,15 +446,7 @@ export default function StrideApp() {
       return;
     }
 
-    const dayHabits = habits[selectedDateStr] || [];
-    const habit = dayHabits.find(h => h.id === id);
-    if (habit) {
-      if (!habit.isDone) {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      } else {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      }
-    }
+    triggerHaptic('shock');
 
     try {
       await contextToggleHabit(id, selectedDateStr);
@@ -470,19 +462,7 @@ export default function StrideApp() {
       return;
     }
 
-    const dayHabits = habits[selectedDateStr] || [];
-    const habit = dayHabits.find(h => h.id === id);
-    if (!habit || !habit.isNumeric) return;
-
-    const nextVal = Math.max(0, (habit.currentValue || 0) + amount);
-    const target = habit.targetValue || 1;
-    const isNowDone = nextVal >= target;
-
-    if (amount > 0) {
-      Haptics.impactAsync(isNowDone ? Haptics.ImpactFeedbackStyle.Heavy : Haptics.ImpactFeedbackStyle.Medium);
-    } else {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    }
+    triggerHaptic('shock');
 
     try {
       await contextAdjustHabitProgressAmount(id, selectedDateStr, amount);
@@ -492,6 +472,7 @@ export default function StrideApp() {
   };
 
   const onCalendarDayPress = useCallback((dateStr: string) => {
+    triggerHaptic('shock');
     setSelectedDateStr(dateStr);
   }, []);
 
