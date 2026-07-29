@@ -1,4 +1,5 @@
 import { useHabitsContext } from '@/context/HabitsContext';
+import { triggerHaptic } from '@/utils/haptics';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useMemo, useState } from 'react';
@@ -60,14 +61,17 @@ export default function StatisticsScreen() {
    }, [currentMonth]);
 
    const prevMonth = () => {
+      triggerHaptic('light');
       setCurrentMonth(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1));
    };
 
    const nextMonth = () => {
+      triggerHaptic('light');
       setCurrentMonth(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, 1));
    };
 
    const prevWeek = () => {
+      triggerHaptic('light');
       setCurrentWeekStart(prev => {
          const next = new Date(prev);
          next.setDate(prev.getDate() - 7);
@@ -76,6 +80,7 @@ export default function StatisticsScreen() {
    };
 
    const nextWeek = () => {
+      triggerHaptic('light');
       setCurrentWeekStart(prev => {
          const next = new Date(prev);
          next.setDate(prev.getDate() + 7);

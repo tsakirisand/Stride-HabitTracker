@@ -1,5 +1,6 @@
 import { useHabitsContext } from '@/context/HabitsContext';
 import { auth } from '@/firebase/config';
+import { triggerHaptic } from '@/utils/haptics';
 import { Ionicons } from '@expo/vector-icons';
 import { signOut } from 'firebase/auth';
 import React from 'react';
@@ -10,6 +11,7 @@ export default function SettingsScreen() {
    const { user, isLoaded } = useHabitsContext();
 
    const handleSignOut = () => {
+      triggerHaptic('warning');
       const isAnonymous = user?.isAnonymous;
 
       Alert.alert(

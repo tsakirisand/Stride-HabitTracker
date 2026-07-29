@@ -1,6 +1,6 @@
 import { useHabitsContext } from '@/context/HabitsContext';
 import { Ionicons } from '@expo/vector-icons';
-import * as Haptics from 'expo-haptics';
+import { triggerHaptic } from '@/utils/haptics';
 import { useRouter } from 'expo-router';
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -566,28 +566,30 @@ export default function StrideApp() {
     }
 
     return (
-      <TouchableOpacity
+      <View
         style={[styles.habitCardRow, habit.isDone && styles.habitCardDone, isFutureDate && { opacity: 0.6 }]}
-        onPress={() => {
-          if (habit.isNumeric) {
-            if (habit.isDone) {
-              adjustNumericHabit(habit.id, -1);
-            } else {
-              adjustNumericHabit(habit.id, 1);
-            }
-          } else {
-            toggleHabit(habit.id);
-          }
-        }}
-        onLongPress={() => {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-          setLongPressedHabit(habit);
-          setIsContextMenuVisible(true);
-        }}
-        delayLongPress={350}
-        activeOpacity={isFutureDate ? 1 : 0.7}
       >
-        <View style={styles.habitCardNormalLeft}>
+        <TouchableOpacity
+          style={styles.habitCardNormalLeft}
+          onPress={() => {
+            if (habit.isNumeric) {
+              if (habit.isDone) {
+                adjustNumericHabit(habit.id, -1);
+              } else {
+                adjustNumericHabit(habit.id, 1);
+              }
+            } else {
+              toggleHabit(habit.id);
+            }
+          }}
+          onLongPress={() => {
+            triggerHaptic('heavy');
+            setLongPressedHabit(habit);
+            setIsContextMenuVisible(true);
+          }}
+          delayLongPress={350}
+          activeOpacity={isFutureDate ? 1 : 0.7}
+        >
           <View style={{ flex: 1 }}>
             <Text style={[styles.habitText, habit.isDone && styles.habitTextDone, isFutureDate && { color: '#888' }]}>
               {habit.name}
@@ -600,70 +602,70 @@ export default function StrideApp() {
               <Text style={[styles.streakText, !habit.isDone && { color: '#666' }]}>{streak}</Text>
             </View>
           )}
+        </TouchableOpacity>
 
-          <TouchableOpacity
-            activeOpacity={0.6}
-            onPress={() => {
-              if (habit.isNumeric) {
-                if (habit.isDone) adjustNumericHabit(habit.id, -1);
-                else adjustNumericHabit(habit.id, 1);
-              } else {
-                toggleHabit(habit.id);
-              }
-            }}
-            onLongPress={() => {
-              if (habit.isNumeric) {
-                adjustNumericHabit(habit.id, -1);
-              } else {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-                setLongPressedHabit(habit);
-                setIsContextMenuVisible(true);
-              }
-            }}
-            delayLongPress={300}
-            style={[
-              styles.checkbox,
-              habit.isDone && styles.checkboxDone,
-              isFutureDate && { borderColor: '#444', backgroundColor: 'transparent' }
-            ]}
-          >
-            {habit.isNumeric && !habit.isDone ? (
-              <>
-                <Svg height="34" width="34" viewBox="0 0 34 34" style={{ position: 'absolute' }}>
-                  <Circle
-                    cx="17" cy="17" r="15"
-                    stroke="#2C2C2C" strokeWidth="2" fill="transparent"
-                  />
-                  <Circle
-                    cx="17" cy="17" r="15"
-                    stroke="#4DA8DA" strokeWidth="2" fill="transparent"
-                    strokeDasharray={2 * Math.PI * 15}
-                    strokeDashoffset={(2 * Math.PI * 15) - (((habit.currentValue || 0) / (habit.targetValue || 1)) * (2 * Math.PI * 15))}
-                    strokeLinecap="round"
-                    transform="rotate(-90 17 17)"
-                  />
-                </Svg>
-                <Text style={styles.numericValueOverlay}>
-                  {habit.currentValue || 0}
-                </Text>
-              </>
-            ) : habit.isDone ? (
-              <Svg height="20" width="20" viewBox="0 0 24 24">
-                <Path
-                  d="M5 12l5 5L19 7"
-                  fill="none"
-                  stroke="#121212"
-                  strokeWidth="4"
+        <TouchableOpacity
+          activeOpacity={0.6}
+          onPress={() => {
+            if (habit.isNumeric) {
+              if (habit.isDone) adjustNumericHabit(habit.id, -1);
+              else adjustNumericHabit(habit.id, 1);
+            } else {
+              toggleHabit(habit.id);
+            }
+          }}
+          onLongPress={() => {
+            if (habit.isNumeric) {
+              adjustNumericHabit(habit.id, -1);
+            } else {
+              triggerHaptic('heavy');
+              setLongPressedHabit(habit);
+              setIsContextMenuVisible(true);
+            }
+          }}
+          delayLongPress={300}
+          style={[
+            styles.checkbox,
+            habit.isDone && styles.checkboxDone,
+            isFutureDate && { borderColor: '#444', backgroundColor: 'transparent' }
+          ]}
+        >
+          {habit.isNumeric && !habit.isDone ? (
+            <>
+              <Svg height="34" width="34" viewBox="0 0 34 34" style={{ position: 'absolute' }}>
+                <Circle
+                  cx="17" cy="17" r="15"
+                  stroke="#2C2C2C" strokeWidth="2" fill="transparent"
+                />
+                <Circle
+                  cx="17" cy="17" r="15"
+                  stroke="#4DA8DA" strokeWidth="2" fill="transparent"
+                  strokeDasharray={2 * Math.PI * 15}
+                  strokeDashoffset={(2 * Math.PI * 15) - (((habit.currentValue || 0) / (habit.targetValue || 1)) * (2 * Math.PI * 15))}
                   strokeLinecap="round"
-                  strokeLinejoin="round"
+                  transform="rotate(-90 17 17)"
                 />
               </Svg>
-            ) : (
-              null
-            )}
-          </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
+              <Text style={styles.numericValueOverlay}>
+                {habit.currentValue || 0}
+              </Text>
+            </>
+          ) : habit.isDone ? (
+            <Svg height="20" width="20" viewBox="0 0 24 24">
+              <Path
+                d="M5 12l5 5L19 7"
+                fill="none"
+                stroke="#121212"
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </Svg>
+          ) : (
+            null
+          )}
+        </TouchableOpacity>
+      </View>
     );
   };
 
@@ -687,11 +689,20 @@ export default function StrideApp() {
           <View style={styles.headerRight}>
             <TouchableOpacity
               style={[styles.headerBtn, isGlobalEditMode ? styles.headerBtnActive : styles.headerBtnDark]}
-              onPress={() => setIsGlobalEditMode(!isGlobalEditMode)}
+              onPress={() => {
+                triggerHaptic('light');
+                setIsGlobalEditMode(!isGlobalEditMode);
+              }}
             >
               <Ionicons name={isGlobalEditMode ? "checkmark" : "list"} size={22} color="#FFF" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.headerBtnAdd} onPress={openAddModal}>
+            <TouchableOpacity
+              style={styles.headerBtnAdd}
+              onPress={() => {
+                triggerHaptic('medium');
+                openAddModal();
+              }}
+            >
               <Svg height="22" width="22" viewBox="0 0 24 24">
                 <Path
                   d="M12 5v14M5 12h14"
@@ -801,19 +812,17 @@ export default function StrideApp() {
               <Text style={styles.emptyStateText}>No habits for this day.</Text>
               <Text style={styles.emptyStateSubtext}>Tap the + button to add one</Text>
             </View>
-          ) : (
+          ) : isGlobalEditMode ? (
             <DraggableFlatList
-              key={`list-${selectedDateStr}`} // Critical fix: Forces full remount on day change to avoid cached rendering bugs!
+              key={`list-drag-${selectedDateStr}`}
               data={listData}
               onDragEnd={({ data }) => {
-                // Update the global preferred order completely deterministically
                 const newDayOrderIds = data
                   .filter((h): h is Habit => !('type' in h))
                   .map(h => h.id);
 
                 setGlobalHabitOrder(prevOrder => {
                   const mergedOrder = [...prevOrder];
-
                   const affectedIndices = newDayOrderIds
                     .map(id => mergedOrder.indexOf(id))
                     .filter(idx => idx !== -1)
@@ -831,7 +840,16 @@ export default function StrideApp() {
               }}
               keyExtractor={(item) => item.id}
               contentContainerStyle={styles.flatListContent}
-              showsVerticalScrollIndicator={false}
+              showsVerticalScrollIndicator={true}
+              renderItem={renderHabitItem}
+            />
+          ) : (
+            <FlatList
+              key={`list-std-${selectedDateStr}`}
+              data={listData}
+              keyExtractor={(item) => item.id}
+              contentContainerStyle={styles.flatListContent}
+              showsVerticalScrollIndicator={true}
               renderItem={renderHabitItem}
             />
           )}
@@ -872,7 +890,10 @@ export default function StrideApp() {
                 <View style={styles.typeRow}>
                   <TouchableOpacity
                     style={[styles.typeBtn, !isNumeric && styles.typeBtnSelected]}
-                    onPress={() => setIsNumeric(false)}
+                    onPress={() => {
+                      triggerHaptic('light');
+                      setIsNumeric(false);
+                    }}
                   >
                     <View style={[styles.typeIconBg, !isNumeric && styles.typeIconBgSelected]}>
                       <Ionicons name="checkmark-circle" size={24} color={!isNumeric ? "#FFF" : "#888"} />
@@ -881,7 +902,10 @@ export default function StrideApp() {
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={[styles.typeBtn, isNumeric && styles.typeBtnSelected]}
-                    onPress={() => setIsNumeric(true)}
+                    onPress={() => {
+                      triggerHaptic('light');
+                      setIsNumeric(true);
+                    }}
                   >
                     <View style={[styles.typeIconBg, isNumeric && styles.typeIconBgSelected]}>
                       <Ionicons name="stats-chart" size={22} color={isNumeric ? "#FFF" : "#888"} />
@@ -902,7 +926,7 @@ export default function StrideApp() {
                         const val = parseInt(targetGoal, 10) || 1;
                         if (val > 1) {
                           setTargetGoal((val - 1).toString());
-                          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                          triggerHaptic('light');
                         }
                       }}
                     >
@@ -920,7 +944,7 @@ export default function StrideApp() {
                       onPress={() => {
                         const val = parseInt(targetGoal, 10) || 1;
                         setTargetGoal((val + 1).toString());
-                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                        triggerHaptic('medium');
                       }}
                     >
                       <Ionicons name="add" size={24} color="#FFF" />
@@ -940,6 +964,7 @@ export default function StrideApp() {
                         key={dayIndex}
                         style={[styles.dayToggleBtn, isSelected && styles.dayToggleBtnSelected]}
                         onPress={() => {
+                          triggerHaptic('light');
                           if (isSelected) {
                             setSelectedDaysOfWeek(prev => prev.filter(d => d !== dayIndex));
                           } else {
