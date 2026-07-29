@@ -1,11 +1,12 @@
 # Stride Habit Tracker 🏃‍♂️📅
 
-Stride is a premium, feature-rich React Native and Expo habit tracking application designed to help users build consistency and achieve their personal goals. It integrates seamlessly with Firebase (Authentication and Firestore) for real-time synchronization and secure cloud backups.
+Stride is a premium, feature-rich React Native and Expo habit tracking application designed to help users build consistency and achieve their personal goals. It runs seamlessly as a mobile app (iOS & Android) and as a **Production Web App** with static rendering, real-time Firebase sync, and automated cloud deployments.
 
 ---
 
 ## 🌟 Key Features
 
+- **Cross-Platform & Web Support**: Works smoothly on iOS, Android, and Web Browsers (PWA ready).
 - **Flexible Habit Types**:
   - **Standard Habits**: Simple toggle checkoffs (e.g., "Read 20 pages").
   - **Numeric/Target Habits**: Log progressive metrics with specific targets (e.g., "Drink 2500ml Water", "Do 50 Pushups").
@@ -14,7 +15,7 @@ Stride is a premium, feature-rich React Native and Expo habit tracking applicati
   - **Individual Streaks**: Tracks consecutive completion days for each individual habit.
   - **Master Streak**: Celebrates consecutive days where 100% of all scheduled habits are completed.
 - **Interactive Calendar Dashboard**: Scroll through a 1-year history to view past completions and plan ahead.
-- **Drag-and-Drop Reordering**: Organise your habits list effortlessly using intuitive press-and-drag interactions.
+- **Drag-and-Drop Reordering**: Organize your habits list effortlessly using intuitive press-and-drag interactions.
 - **Rich Data Analytics**: Deep dive into your productivity with weekly and monthly completion statistics.
 - **Firebase Sync**: Supports anonymous sign-in and email logins, keeping habit histories securely backed up and synced in real-time.
 - **Beautiful Dark Theme UI**: Sleek, modern dark mode with smooth animations and responsive feedback.
@@ -24,16 +25,18 @@ Stride is a premium, feature-rich React Native and Expo habit tracking applicati
 ## 🛠️ Tech Stack
 
 - **Framework**: [Expo](https://expo.dev) & [React Native](https://reactnative.dev)
+- **Web Engine**: [React Native Web](https://necolas.github.io/react-native-web/) & Expo Static Export
 - **Routing**: [Expo Router](https://docs.expo.dev/router/introduction) (file-based navigation)
 - **Database & Auth**: [Firebase v12](https://firebase.google.com) (Firestore & Auth)
 - **Animations & Layout**: [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/) & [React Native Draggable FlatList](https://github.com/computerjazz/react-native-draggable-flatlist)
-- **Icons**: Expo Vector Icons (Ionicons)
+- **Deployments**: GitHub Pages, Vercel (`vercel.json`), and Firebase Hosting
 
 ---
 
 ## 📂 Project Structure
 
 ```text
+├── .github/workflows/   # Automated GitHub Pages CI/CD workflow
 ├── app/                  # Expo Router file-based entry screens
 │   ├── (auth)/           # Authentication screens (Login, Sign-Up, Welcome)
 │   ├── (tabs)/           # Core application tabs
@@ -42,12 +45,14 @@ Stride is a premium, feature-rich React Native and Expo habit tracking applicati
 │   │   └── settings.tsx  # User Settings & Sign Out
 │   ├── _layout.tsx       # Root layout navigator & Providers wrapper
 │   └── modal.tsx         # Add / Edit Habit detail form
+├── assets/               # Brand assets, custom logos, and favicons
 ├── components/           # Custom UI elements (themed views, navigation, buttons)
 ├── context/              # Global state management (HabitsContext)
 ├── firebase/             # Firestore, Auth config, and initialization
 ├── hooks/                # Custom React hooks (useHabits, theme styling)
 ├── services/             # Firebase data access layer
-└── utils/                # Helper utilities and date formatters
+├── vercel.json           # Vercel static Expo deployment configuration
+└── firebase.json         # Firebase Hosting & Cloud Functions configuration
 ```
 
 ---
@@ -61,39 +66,59 @@ Make sure you have Node.js and npm installed on your system.
 ### 1. Clone the repository and install dependencies
 
 ```bash
-git clone https://github.com/andreast0702-sudo/Stride-HabitTracker.git
+git clone https://github.com/tsakirisand/Stride-HabitTracker.git
 cd Stride-HabitTracker
 npm install
 ```
 
 ### 2. Configure Firebase
 
-Create a Firebase project at [Firebase Console](https://console.firebase.google.com/) and create web config credentials. Add a config file or update configuration in `firebase/config.js` with your specific API keys:
+Update configuration in `firebase/config.js` with your Firebase API keys. The app automatically selects `browserLocalPersistence` for web builds and React Native persistence for mobile.
 
-```javascript
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
-```
+---
 
-### 3. Run the development server
+## 💻 Web App & Production Builds
 
-Start the Expo bundler:
-
+### 1. Run Web Development Server
 ```bash
-npx expo start
+npm run web
+# or: npx expo start --web
 ```
 
-Use the printed options to open the application in:
-- **iOS Simulator**: Press `i`
-- **Android Emulator**: Press `a`
-- **Web Browser**: Press `w`
-- **Expo Go App**: Scan the QR code with your mobile device
+### 2. Export Web Production Bundle
+Generate optimized static web production files in the `dist` directory:
+```bash
+npm run build:web
+```
+
+### 3. Preview Production Build Locally
+```bash
+npx serve dist
+```
+
+---
+
+## 🌐 Deployment Options
+
+### GitHub Pages (Automated & CLI)
+
+- **CLI Deployment**:
+  ```bash
+  npm run deploy:gh-pages
+  ```
+- **Automated CI/CD**: A GitHub Actions workflow (`.github/workflows/deploy.yml`) builds and deploys to GitHub Pages automatically whenever changes are pushed to `main`.
+
+### Vercel Deployment
+Deploy directly using the Vercel CLI or by connecting your repository on [Vercel Dashboard](https://vercel.com):
+```bash
+npx vercel
+```
+*(Pre-configured with `vercel.json` for single-page routing)*
+
+### Firebase Hosting
+```bash
+firebase deploy --only hosting
+```
 
 ---
 
